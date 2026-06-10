@@ -6,6 +6,7 @@ export const ALBUMS = [
     band: "Redonditos de Ricota",
     cover: "https://upload.wikimedia.org/wikipedia/en/thumb/a/a7/Ricota_gulp.jpg/220px-Ricota_gulp.jpg",
     coverFallback: "https://images.pexels.com/photos/167636/pexels-photo-167636.jpeg?auto=compress&cs=tinysrgb&w=400",
+    desc: "El debut discográfico que marcó el nacimiento de un mito. Rock crudo, letras callejeras y la semilla del universo poético del Indio.",
     tracks: [
       "Rock & Fichín",
       "Nena de la Pirotecnia",
@@ -26,6 +27,7 @@ export const ALBUMS = [
     band: "Redonditos de Ricota",
     cover: "https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/Ricota_oktubre.jpg/220px-Ricota_oktubre.jpg",
     coverFallback: "https://images.pexels.com/photos/210922/pexels-photo-210922.jpeg?auto=compress&cs=tinysrgb&w=400",
+    desc: "Sonido más elaborado y letras que se vuelven herméticas. La banda empieza a construir su propio lenguaje.",
     tracks: [
       "Todo un Palo",
       "Mi Perro Dinamita",
@@ -46,6 +48,7 @@ export const ALBUMS = [
     band: "Redonditos de Ricota",
     cover: "https://upload.wikimedia.org/wikipedia/en/thumb/e/e1/Ricota_locos.jpg/220px-Ricota_locos.jpg",
     coverFallback: "https://images.pexels.com/photos/3756766/pexels-photo-3756766.jpeg?auto=compress&cs=tinysrgb&w=400",
+    desc: "El álbum que los consagra. Jijiji se convierte en himno generacional y la banda explota en popularidad.",
     tracks: [
       "Jijiji",
       "Barbazul",
@@ -66,6 +69,7 @@ export const ALBUMS = [
     band: "Redonditos de Ricota",
     cover: "https://upload.wikimedia.org/wikipedia/en/thumb/c/c8/Ricota_baion.jpg/220px-Ricota_baion.jpg",
     coverFallback: "https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=400",
+    desc: "Experimental y arriesgado. Fusiones de rock, tango y jazz con una portada icónica diseñada por Rocambole.",
     tracks: [
       "Antes de que Cuente 10",
       "El León",
@@ -84,6 +88,7 @@ export const ALBUMS = [
     band: "Redonditos de Ricota",
     cover: "https://upload.wikimedia.org/wikipedia/en/thumb/7/75/Ricota_mosca.jpg/220px-Ricota_mosca.jpg",
     coverFallback: "https://images.pexels.com/photos/167092/pexels-photo-167092.jpeg?auto=compress&cs=tinysrgb&w=400",
+    desc: "Un álbum oscuro y reflexivo. La madurez compositiva alcanza su punto más alto con letras crípticas y poderosas.",
     tracks: [
       "Fue Lento el Proceso",
       "Fuera de Horario",
@@ -103,6 +108,7 @@ export const ALBUMS = [
     band: "Redonditos de Ricota",
     cover: "https://upload.wikimedia.org/wikipedia/en/thumb/2/27/Ricota_luzbelito.jpg/220px-Ricota_luzbelito.jpg",
     coverFallback: "https://images.pexels.com/photos/3756943/pexels-photo-3756943.jpeg?auto=compress&cs=tinysrgb&w=400",
+    desc: "La obra maestra absoluta. 12 canciones que recorren el universo del Indio en su punto más alto de creatividad y popularidad.",
     tracks: [
       "Pura Suerte",
       "Queso Ruso",
@@ -125,6 +131,7 @@ export const ALBUMS = [
     band: "Redonditos de Ricota",
     cover: "https://upload.wikimedia.org/wikipedia/en/thumb/4/49/Ricota_bondi.jpg/220px-Ricota_bondi.jpg",
     coverFallback: "https://images.pexels.com/photos/1540406/pexels-photo-1540406.jpeg?auto=compress&cs=tinysrgb&w=400",
+    desc: "El penúltimo álbum de estudio. Zona de Promesas se convierte en otro himno masivo del repertorio.",
     tracks: [
       "Santo Sinner",
       "Bizcochito",
@@ -146,6 +153,7 @@ export const ALBUMS = [
     band: "Redonditos de Ricota",
     cover: "https://upload.wikimedia.org/wikipedia/en/thumb/4/4e/Ricota_momo.jpg/220px-Ricota_momo.jpg",
     coverFallback: "https://images.pexels.com/photos/3721941/pexels-photo-3721941.jpeg?auto=compress&cs=tinysrgb&w=400",
+    desc: "El último disco de la banda. Una despedida con La Bestia Pop como legado final a una generación.",
     tracks: [
       "La Bestia Pop",
       "Ella es Tan Casual",
@@ -160,11 +168,12 @@ export const ALBUMS = [
   },
   {
     id: 9,
-    title: "El Perfume del Indio / El Tesoro de los Inocentes",
+    title: "El Perfume del Indio",
     year: 2004,
     band: "Solista",
     cover: "https://upload.wikimedia.org/wikipedia/en/thumb/4/42/Indio_perfume.jpg/220px-Indio_perfume.jpg",
     coverFallback: "https://images.pexels.com/photos/2263436/pexels-photo-2263436.jpeg?auto=compress&cs=tinysrgb&w=400",
+    desc: "El debut solista confirma que el Indio no necesitaba a los Redondos para seguir siendo gigante.",
     tracks: [
       "El perfume del Indio",
       "El Tesoro de los Inocentes",
@@ -182,6 +191,7 @@ export const ALBUMS = [
     band: "Solista",
     cover: "https://upload.wikimedia.org/wikipedia/en/thumb/6/64/Indio_ruisenor.jpg/220px-Indio_ruisenor.jpg",
     coverFallback: "https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg?auto=compress&cs=tinysrgb&w=400",
+    desc: "Remixes y versiones alternativas que exploran nuevos territorios sonoros.",
     tracks: [
       "El Ruiseñor, el Amor y la Muerte",
       "Rémix",
@@ -198,6 +208,7 @@ export const ALBUMS = [
     band: "Solista",
     cover: "https://upload.wikimedia.org/wikipedia/en/thumb/8/8e/Indio_años_salvajes.jpg/220px-Indio_años_salvajes.jpg",
     coverFallback: "https://images.pexels.com/photos/325521/pexels-photo-325521.jpeg?auto=compress&cs=tinysrgb&w=400",
+    desc: "Un retorno a las raíces del rock más directo, con guiños al pasado y mirada al presente.",
     tracks: [
       "El Marinero y la Estrella de Mar",
       "Fina Estampa",
@@ -217,6 +228,7 @@ export const ALBUMS = [
     band: "Solista",
     cover: "https://upload.wikimedia.org/wikipedia/en/thumb/2/26/El_vendedor_de_chucher%C3%ADas.jpg/220px-El_vendedor_de_chucher%C3%ADas.jpg",
     coverFallback: "https://images.pexels.com/photos/1656684/pexels-photo-1656684.jpeg?auto=compress&cs=tinysrgb&w=400",
+    desc: "El último álbum de estudio. Una carta de despedida anticipada llena de nostalgia y melancolía.",
     tracks: [
       "El Vendedor de Chucherías",
       "Alma de Mierda",

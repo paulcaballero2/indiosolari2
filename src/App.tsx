@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ALBUMS, GALLERY_PHOTOS, TRIVIA_QUESTIONS } from './data';
 import {
   initTrivia,
@@ -9,7 +9,6 @@ import {
   generateCard,
   downloadCard,
   activatePogo,
-  toggleAlbum,
   openLightbox,
   closeLightbox,
 } from './utils';
@@ -19,72 +18,65 @@ const NEWS_ITEMS = [
     id: 1,
     title: 'Los fans despiden al Indio en Olavarría',
     date: 'Junio 2025',
-    excerpt: 'Miles de ricoteros se reunieron silenciosamente en el lugar donde se dio el recital más grande de su carrera solista.',
+    excerpt: 'Miles de ricoteros se reunieron en el lugar del recital más grande.',
     img: 'https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=400',
-    body: 'Una multitud silenciosa colocó velas, banderas y cantó a capella los clásicos de los Redondos. La ciudad se tiñó de rojo y negro como homenaje eterno. El Indio ya es leyenda, pero esta noche su pueblo demostró que vive en cada corazón.'
+    body: 'Una multitud silenciosa colocó velas y banderas. El Indio ya es leyenda.'
   },
   {
     id: 2,
     title: 'Se reedita Luzbelito en vinilo de lujo',
     date: 'Mayo 2025',
-    excerpt: 'La obra maestra de 1996 vuelve a los tornamesas en una edición remasterizada con material inédito.',
+    excerpt: 'La obra maestra de 1996 vuelve en edición remasterizada.',
     img: 'https://images.pexels.com/photos/167636/pexels-photo-167636.jpeg?auto=compress&cs=tinysrgb&w=400',
-    body: 'Tres discos de vinilo, un libro arte de 40 páginas con dibujos de Rocambole y versiones alternativas de Pura Suerte y Divina Gloria. Una edición de coleccionista para los ricoteros que vivieron el mito de cerca.'
+    body: 'Tres discos de vinilo y libro de arte. Edición de coleccionista.'
   },
   {
     id: 3,
     title: 'El archivo gráfico del Indio será museo',
     date: 'Abril 2025',
-    excerpt: 'El archivo de tapas, afiches y obra visual de la banda se donará al Museo de Bellas Artes de La Plata.',
+    excerpt: 'Tapas y afiches al Museo de Bellas Artes de La Plata.',
     img: 'https://images.pexels.com/photos/3756766/pexels-photo-3756766.jpeg?auto=compress&cs=tinysrgb&w=400',
-    body: 'Rocambole y el Indio anunciaron que toda la iconografía será conservada como patrimonio artístico nacional. Las tapas originales, los afiches raros de los shows en Obras y los dibujos inéditos formarán parte de una muestra itinerante.'
+    body: 'Iconografía donada como patrimonio artístico nacional.'
   },
   {
     id: 4,
     title: 'Las cartas del Indio a Skay serán publicadas',
     date: 'Marzo 2025',
-    excerpt: 'Documentos de 18 años de amistad revelan la génesis de los himnos redondos.',
+    excerpt: 'Documentos de 18 años de amistad y creación.',
     img: 'https://images.pexels.com/photos/1699161/pexels-photo-1699161.jpeg?auto=compress&cs=tinysrgb&w=400',
-    body: 'Más de 200 cartas donde el Indio le contaba a Skay borradores de Jijiji, Luzbelito y Zona de Promesas. Una ventana íntima a la relación artística más importante del rock nacional. Se publicarán con prólogo de Pappo.'
+    body: 'Más de 200 cartas revelan la génesis de los himnos.'
   },
   {
     id: 5,
-    title: 'Un documental cubre los shows de Mar del Plata 1998',
+    title: 'Documental del show de Mar del Plata 1998',
     date: 'Febrero 2025',
-    excerpt: 'Material inédito del recital que reunió a 100.000 almas ahora en restauración 4K.',
+    excerpt: 'Material inédito en restauración 4K.',
     img: 'https://images.pexels.com/photos/2399097/pexels-photo-2399097.jpeg?auto=compress&cs=tinysrgb&w=400',
-    body: 'Cámaras caseras, archivos de noticieros y el audio de la consola de sonido se unen en un documental sobre aquella noche mítica. Testimonios del Indio, Skay y fans que estuvieron ahí se entrelazan con imágenes nunca vistas.'
+    body: 'Cámaras caseras y audio de consola se unen en un documental mítico.'
   },
   {
     id: 6,
     title: 'Escuela de música popular llevará su nombre',
     date: 'Enero 2025',
-    excerpt: 'La primera escuela pública de rock de La Plata se llamará "Carlos Solari".',
+    excerpt: 'Primera escuela pública de rock en La Plata.',
     img: 'https://images.pexels.com/photos/144428/pexels-photo-144428.jpeg?auto=compress&cs=tinysrgb&w=400',
-    body: 'Un proyecto municipal convertirá un antiguo galpón en un espacio de formación gratuita para jóvenes que quieran hacer rock. El Indio aprobó la iniciativa antes de su muerte: "Que sepan que se puede hacer sin pedir permiso".'
+    body: 'Formación gratuita para jóvenes. "Que sepan que se puede".'
   }
 ];
 
 export default function App() {
+  const [selectedAlbum, setSelectedAlbum] = useState(ALBUMS[0]);
+  const [activeNews, setActiveNews] = useState<number | null>(null);
+
   useEffect(() => {
     initTrivia();
 
-    // Close lightbox on backdrop click
     const lb = document.getElementById('lightbox');
     lb?.addEventListener('click', (e) => { if (e.target === lb) closeLightbox(); });
 
-    // Close modal on backdrop click
     const modal = document.getElementById('share-modal');
     modal?.addEventListener('click', (e) => { if (e.target === modal) closeShareModal(); });
   }, []);
-
-  const toggleNews = (id: number) => {
-    const card = document.querySelector(`[data-news="${id}"]`);
-    if (!card) return;
-    const isActive = card.classList.contains('active');
-    document.querySelectorAll('.news-card.active').forEach(c => c.classList.remove('active'));
-    if (!isActive) card.classList.add('active');
-  };
 
   return (
     <>
@@ -128,7 +120,7 @@ export default function App() {
           </div>
           <div className="scroll-hint">
             <div className="scroll-arrow" />
-            <span>Scroll horizontal</span>
+            <span>Scroll</span>
           </div>
         </section>
 
@@ -138,48 +130,50 @@ export default function App() {
             <p className="section-label">Historia</p>
             <h2 className="section-title-gradient">La Vida del Indio</h2>
           </div>
-          <div className="bio-scroll">
-            <img
-              className="bio-header-img"
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Carlos_Indio_Solari.jpg/800px-Carlos_Indio_Solari.jpg"
-              alt="Indio Solari"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = 'https://images.pexels.com/photos/1699161/pexels-photo-1699161.jpeg?auto=compress&cs=tinysrgb&w=600';
-              }}
-            />
-            <div className="bio-text">
-              <p>
-                Carlos Alberto Solari, conocido mundialmente como <strong>El Indio Solari</strong>, nació el 17 de enero de 1949 en Paraná, Entre Ríos. Artista plástico de formación, cantante de instinto y poeta de vocación, construyó una de las carreras más influyentes del rock iberoamericano.
-              </p>
-              <div className="bio-quote">
-                "El rock and roll es la única música que tiene la capacidad de transformar la vida de la gente que la escucha."
-              </div>
-              <p>
-                En 1976 formó en La Plata junto a Skay Beilinson la banda que llevaría el nombre de Patricio Rey y sus Redonditos de Ricota. Su carácter hermético, sus letras surrealistas y su rechazo a los medios los convirtieron en fenómeno de culto.
-              </p>
-              <p>
-                A lo largo de 8 álbumes entre 1985 y 2000, construyeron un universo lírico inigualable. tras la disolución en 2001, su carrera solista ratificó su estatura. Sus shows masivos — incluido Olavarría 2017 con 250.000 personas — demostraron un vínculo indestructible con los <strong>Ricoteros</strong>.
-              </p>
-            </div>
-            <div className="bio-timeline">
-              {[
-                { year: "1949", title: "Nacimiento en Paraná", desc: "Nace el 17 de enero en Entre Ríos." },
-                { year: "1976", title: "Fundación de los Redondos", desc: "Junto a Skay Beilinson en La Plata." },
-                { year: "1985", title: "Debut: Gulp!", desc: "Primer disco oficial." },
-                { year: "1996", title: "Luzbelito", desc: "Obra maestra que los consagra." },
-                { year: "2001", title: "Fin de los Redondos", desc: "Separación de la banda." },
-                { year: "2017", title: "Olavarría", desc: "250.000 personas en un show histórico." },
-                { year: "2025", title: "Su partida", desc: "El Indio muere. Patricio Rey nunca muere." },
-              ].map(item => (
-                <div className="timeline-item" key={item.year}>
-                  <span className="timeline-year">{item.year}</span>
-                  <div className="timeline-dot" />
-                  <div className="timeline-content">
-                    <strong>{item.title}</strong>
-                    <p>{item.desc}</p>
-                  </div>
+          <div className="bio-layout">
+            <div className="bio-left">
+              <img
+                className="bio-img-small"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Carlos_Indio_Solari.jpg/800px-Carlos_Indio_Solari.jpg"
+                alt="Indio Solari"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = 'https://images.pexels.com/photos/1699161/pexels-photo-1699161.jpeg?auto=compress&cs=tinysrgb&w=400';
+                }}
+              />
+              <div className="bio-text-compact">
+                <p>
+                  Carlos Alberto Solari nació el 17 de enero de 1949 en Paraná, Entre Ríos. Artista plástico, cantante y poeta, construyó una de las carreras más influyentes del rock iberoamericano.
+                </p>
+                <div className="bio-quote-compact">
+                  "El rock and roll es la única música que puede transformar la vida de quien la escucha."
                 </div>
-              ))}
+                <p>
+                  En 1976 formó Patricio Rey y sus Redonditos de Ricota junto a Skay Beilinson. Su hermetismo y rechazo a los medios los convirtieron en fenómeno de culto.
+                </p>
+              </div>
+            </div>
+            <div className="bio-right">
+              <div className="timeline-compact">
+                {[
+                  { year: "1949", title: "Nacimiento", desc: "Paraná, Entre Ríos" },
+                  { year: "1976", title: "Fundación", desc: "Redondos en La Plata" },
+                  { year: "1985", title: "Debut", desc: "Gulp! marca el inicio" },
+                  { year: "1996", title: "Luzbelito", desc: "Obra ma absoluta" },
+                  { year: "2001", title: "Separación", desc: "Fin de los Redondos" },
+                  { year: "2004", title: "Solista", desc: "El Perfume del Indio" },
+                  { year: "2017", title: "Olavarría", desc: "250.000 personas" },
+                  { year: "2025", title: "Partida", desc: "Patricio Rey nunca muere" },
+                ].map(item => (
+                  <div className="timeline-item-compact" key={item.year}>
+                    <span className="timeline-year-compact">{item.year}</span>
+                    <div className="timeline-dot-compact" />
+                    <div className="timeline-content-compact">
+                      <strong>{item.title}</strong>
+                      <p>{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -190,38 +184,40 @@ export default function App() {
             <p className="section-label">Discografía</p>
             <h2 className="section-title-gradient">Tapas y Canciones</h2>
           </div>
-          <div className="disco-scroll">
-            <p style={{ color: 'var(--white-dim)', marginBottom: '1.5rem', fontSize: '0.85rem' }}>
-              Clic en cada tapa para ver el tracklist.
-            </p>
-            <div className="albums-horizontal">
+          <div className="disco-layout">
+            <div className="disco-featured">
+              <img
+                className="disco-featured-cover"
+                src={selectedAlbum.cover}
+                alt={selectedAlbum.title}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = selectedAlbum.coverFallback;
+                }}
+              />
+              <div className="disco-featured-info">
+                <h3>{selectedAlbum.title}</h3>
+                <p className="disco-featured-meta">{selectedAlbum.year} · {selectedAlbum.band}</p>
+                <p className="disco-featured-desc">{selectedAlbum.desc}</p>
+              </div>
+              <ol className="disco-featured-tracks">
+                {selectedAlbum.tracks.map((track, i) => (
+                  <li key={i}>
+                    <span className="track-num">{String(i + 1).padStart(2, '0')}</span>
+                    {track}
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <div className="disco-mosaic">
               {ALBUMS.map(album => (
                 <div
-                  className="album-card"
+                  className={`disco-mosaic-item ${album.id === selectedAlbum.id ? 'active' : ''}`}
                   key={album.id}
-                  data-album={album.id}
-                  onClick={() => toggleAlbum(album.id)}
+                  onClick={() => setSelectedAlbum(album)}
                 >
-                  <div className="album-cover">
-                    <img src={album.cover} alt={album.title} onError={(e) => {
-                      (e.target as HTMLImageElement).src = album.coverFallback;
-                    }} />
-                  </div>
-                  <div className="album-info">
-                    <h3>{album.title}</h3>
-                    <p>{album.year}</p>
-                    <span className="album-badge">{album.band}</span>
-                  </div>
-                  <div className="tracklist">
-                    <ol>
-                      {album.tracks.map((track, i) => (
-                        <li key={i}>
-                          <span className="track-num">{String(i + 1).padStart(2, '0')}</span>
-                          {track}
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
+                  <img src={album.cover} alt={album.title} onError={(e) => {
+                    (e.target as HTMLImageElement).src = album.coverFallback;
+                  }} />
                 </div>
               ))}
             </div>
@@ -234,15 +230,15 @@ export default function App() {
             <p className="section-label">Galería</p>
             <h2 className="section-title-gradient">El Mito en Imágenes</h2>
           </div>
-          <div className="gallery-grid">
+          <div className="gallery-compact">
             {GALLERY_PHOTOS.map((photo, i) => (
               <div
-                className="gallery-item"
+                className="gallery-item-compact"
                 key={i}
                 onClick={() => openLightbox(photo.src)}
               >
                 <img src={photo.src} alt={photo.caption} onError={(e) => {
-                  (e.target as HTMLImageElement).src = `https://images.pexels.com/photos/167636/pexels-photo-167636.jpeg?auto=compress&cs=tinysrgb&w=600`;
+                  (e.target as HTMLImageElement).src = 'https://images.pexels.com/photos/167636/pexels-photo-167636.jpeg?auto=compress&cs=tinysrgb&w=400';
                 }} />
                 <div className="overlay"><span>{photo.caption}</span></div>
               </div>
@@ -254,34 +250,25 @@ export default function App() {
         <section id="news-panel" className="panel">
           <div className="section-header">
             <p className="section-label">Actualidad</p>
-            <h2 className="section-title-gradient">Noticias Recientes</h2>
+            <h2 className="section-title-gradient">Noticias</h2>
           </div>
-          <div className="news-scroll">
-            <div className="news-list">
-              {NEWS_ITEMS.map(news => (
-                <div
-                  className="news-card"
-                  key={news.id}
-                  data-news={news.id}
-                  onClick={() => toggleNews(news.id)}
-                >
-                  <div className="news-header">
-                    <img className="news-img" src={news.img} alt={news.title} onError={(e) => {
-                      (e.target as HTMLImageElement).src = 'https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=400';
-                    }} />
-                    <div className="news-meta">
-                      <h3>{news.title}</h3>
-                      <time>{news.date}</time>
-                      <p className="news-excerpt">{news.excerpt}</p>
-                    </div>
-                    <div className="news-expand">+</div>
-                  </div>
-                  <div className="news-body">
-                    <div className="news-body-inner">{news.body}</div>
-                  </div>
+          <div className="news-compact">
+            {NEWS_ITEMS.map(news => (
+              <div
+                className={`news-card-compact ${activeNews === news.id ? 'active' : ''}`}
+                key={news.id}
+                onClick={() => setActiveNews(activeNews === news.id ? null : news.id)}
+              >
+                <img className="news-img-compact" src={news.img} alt={news.title} onError={(e) => {
+                  (e.target as HTMLImageElement).src = 'https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=400';
+                }} />
+                <div className="news-body-compact">
+                  <h3>{news.title}</h3>
+                  <time>{news.date}</time>
+                  <p>{activeNews === news.id ? news.body : news.excerpt}</p>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -291,35 +278,34 @@ export default function App() {
             <p className="section-label">Ponete a prueba</p>
             <h2 className="section-title-gradient">¿Qué Tan Fan Sos?</h2>
           </div>
-          <div className="trivia-scroll">
-            <p style={{ color: 'var(--white-dim)', marginBottom: '1.5rem', fontSize: '0.85rem' }}>
-              {TRIVIA_QUESTIONS.length} preguntas sobre su vida, canciones y leyendas.
-            </p>
-            <div className="trivia-container">
-              <div id="trivia-body">
-                <div className="trivia-progress">
-                  <div className="progress-bar">
-                    <div className="progress-fill" id="trivia-progress-fill" style={{ width: '0%' }} />
-                  </div>
-                  <span className="progress-text" id="trivia-progress-text">1 / 50</span>
+          <div className="trivia-layout">
+            <div className="trivia-question-area">
+              <div className="trivia-progress-compact">
+                <div className="progress-bar-compact">
+                  <div className="progress-fill-compact" id="trivia-progress-fill" style={{ width: '0%' }} />
                 </div>
-                <div className="trivia-question" id="trivia-question" />
-                <div className="trivia-options" id="trivia-options" />
-                <div className="trivia-feedback" id="trivia-feedback" />
-                <button className="trivia-next" id="trivia-next" onClick={nextQuestion}>
+                <span className="progress-text-compact" id="trivia-progress-text">1 / 50</span>
+              </div>
+              <div className="trivia-question-text" id="trivia-question" />
+              <div className="trivia-options-compact" id="trivia-options" />
+            </div>
+            <div className="trivia-answer-area">
+              <div id="trivia-body" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                <div className="trivia-feedback-compact" id="trivia-feedback" />
+                <button className="trivia-next-compact" id="trivia-next" onClick={nextQuestion}>
                   Siguiente →
                 </button>
               </div>
-              <div id="trivia-result" className="trivia-result">
-                <div className="result-badge" id="result-badge">0/50</div>
-                <div className="result-score" id="result-score">0% DE ACIERTOS</div>
-                <div className="result-title" id="result-title">Turista del Rock</div>
-                <div className="result-desc" id="result-desc" />
-                <div style={{ marginTop: '1.5rem' }}>
-                  <button className="btn-share" onClick={openShareModal}>
-                    Compartirlo en las redes
+              <div id="trivia-result" className="trivia-result-compact">
+                <div className="result-badge-compact" id="result-badge">0/50</div>
+                <div className="result-score-compact" id="result-score">0% ACIERTOS</div>
+                <div className="result-title-compact" id="result-title">Turista del Rock</div>
+                <div className="result-desc-compact" id="result-desc" />
+                <div style={{ marginTop: '1rem' }}>
+                  <button className="btn-share-compact" onClick={openShareModal}>
+                    Compartirlo en redes
                   </button>
-                  <button className="btn-retry" onClick={retryTrivia}>
+                  <button className="btn-retry-compact" onClick={retryTrivia}>
                     Volver a jugar
                   </button>
                 </div>
@@ -334,7 +320,7 @@ export default function App() {
             <div className="footer-logo">Indio Solari</div>
             <p className="footer-tagline">Patricio Rey Nunca Muere · 1949 – 2025</p>
             <p className="footer-q">
-              "La vida es muy corta para leer explicaciones que no te interesan. Mejor escuchá un tema y dejan que la música hable."
+              "La vida es muy corta para leer explicaciones. Mejor escuchá un tema y dejá que la música hable."
             </p>
           </div>
         </section>
@@ -351,12 +337,12 @@ export default function App() {
       <div id="share-modal" className="modal-overlay">
         <div className="modal-box">
           <h3>Compartí tu resultado</h3>
-          <p>Ingresá tu nombre para generar tu tarjeta y compartirla en redes.</p>
+          <p>Ingresá tu nombre para generar tu tarjeta.</p>
           <input
             id="share-name"
             className="modal-input"
             type="text"
-            placeholder="Tu nombre (ej: El Gordo Villero)"
+            placeholder="Tu nombre"
             maxLength={40}
           />
           <div id="canvas-wrap" style={{ display: 'none' }}>
@@ -365,8 +351,8 @@ export default function App() {
           <button id="dl-btn" className="btn-download" style={{ display: 'none' }} onClick={downloadCard}>
             Descargar imagen
           </button>
-          <div className="modal-actions" style={{ marginTop: '0.8rem' }}>
-            <button className="btn-gen" onClick={generateCard}>Generar tarjeta</button>
+          <div className="modal-actions" style={{ marginTop: '0.6rem' }}>
+            <button className="btn-gen" onClick={generateCard}>Generar</button>
             <button className="btn-cancel" onClick={closeShareModal}>Cancelar</button>
           </div>
         </div>

@@ -37,7 +37,7 @@ function renderQuestion() {
   optionsEl.innerHTML = '';
   q.opts.forEach((opt, i) => {
     const btn = document.createElement('button');
-    btn.className = 'trivia-opt';
+    btn.className = 'trivia-opt-compact';
     btn.textContent = opt;
     btn.addEventListener('click', () => handleAnswer(i));
     optionsEl.appendChild(btn);
@@ -48,7 +48,7 @@ function handleAnswer(idx: number) {
   if (answered) return;
   answered = true;
   const q = TRIVIA_QUESTIONS[currentQ];
-  const opts = document.querySelectorAll('.trivia-opt') as NodeListOf<HTMLButtonElement>;
+  const opts = document.querySelectorAll('.trivia-opt-compact') as NodeListOf<HTMLButtonElement>;
   const feedbackEl = document.getElementById('trivia-feedback') as HTMLDivElement;
   const nextBtn = document.getElementById('trivia-next') as HTMLButtonElement;
 
@@ -243,14 +243,16 @@ export function activatePogo() {
   const selectors = [
     'nav',
     '.hero-content',
-    '.bio-scroll',
-    '.gallery-item',
-    '.album-card',
-    '.news-card',
-    '.trivia-container',
+    '.bio-left',
+    '.bio-right',
+    '.disco-featured',
+    '.disco-mosaic',
+    '.gallery-item-compact',
+    '.news-card-compact',
+    '.trivia-question-area',
+    '.trivia-answer-area',
     '.footer-content',
     '.section-header',
-    '.panel',
   ];
 
   pogoElements = [];
