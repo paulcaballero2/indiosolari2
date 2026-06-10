@@ -228,6 +228,139 @@ let pogoElements: PogoElement[] = [];
 let pogoRAF = 0;
 let pogoEndTime = 0;
 let countdownInterval = 0;
+let pogoAudioContext: AudioContext | null = null;
+let pogoAudioNodes: { stop: () => void } | null = null;
+
+function startPogoSound() {
+  pogoAudioContext = new AudioContext();
+
+  // Create noise for crowd roar
+  const bufferSize = 2 * pogoAudioContext.sampleRate;
+  const noiseBuffer = pogoAudioContext.createBuffer(1, bufferSize, pogoAudioContext.sampleRate);
+  const output = noiseBuffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    output[i] = Math.random() * 2 - 1;
+  }
+
+  const noiseSource = pogoAudioContext.createBufferSource();
+  noiseSource.buffer = noiseBuffer;
+  noiseSource.loop = true;
+
+  // Low-pass filter for crowd rumble
+  const lowPass = pogoAudioContext.createBiquadFilter();
+  lowPass.type = 'lowpass';
+  lowPass.frequency.value = 800;
+  lowPass.Q.value = 1;
+
+  // High-pass to remove sub-bass
+  const highPass = pogoAudioContext.createBiquadFilter();
+  highPass.type = 'highpass';
+  highPass.frequency.value = 100;
+
+  // Gain for crowd
+  const crowdGain = pogoAudioContext.createGain();
+  crowdGain.gain.value = 0.35;
+
+  noiseSource.connect(lowPass);
+  lowPass.connect(highPass);
+  highPass.connect(crowdGain);
+  crowdGain.connect(pogoAudioContext.destination);
+  noiseSource.start();
+
+  // Create bass thump oscillators for pogo rhythm
+  const bassOsc = pogoAudioContext.createOscillator();
+  bassOsc.type = 'sine';
+  bassOsc.frequency.value = 55;
+
+  const bassGain = pogoAudioContext.createGain();
+  bassGain.gain.value = 0.4;
+
+  // LFO for pulsing effect
+  const lfo = pogoAudioContext.createOscillator();
+  lfo.type = 'sine';
+  lfo.frequency.value = 2.5;
+
+  const lfoGain = pogoAudioContext.createGain();
+  lfoGain.gain.value = 0.35;
+
+  lfo.connect(lfoGain);
+  lfoGain.connect(bassGain.gain);
+
+  bassOsc.connect(bassGain);
+  bassGain.connect(pogoAudioContext.destination);
+  bassOsc.start();
+  lfo.start();
+
+  // Add some mid-frequency energy for shouting effect
+  const midNoise = pogoAudioContext.createBufferSource();
+  const midBuffer = pogoAudioContext.createBuffer(1, bufferSize, pogoAudioContext.sampleRate);
+  const midOutput = midBuffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    midOutput[i] = Math.random() * 2 - 1;
+  }
+  midNoise.buffer = midBuffer;
+  midNoise.loop = true;
+
+  const midFilter = pogoAudioContext.createBiquadFilter();
+  midFilter.type = 'bandpass';
+  midFilter.frequency.value = 1200;
+  midFilter.Q.value = 0.5;
+
+  const midGain = pogoAudioContext.createGain();
+  midGain.gain.value = 0.15;
+
+  // Random modulation for shouting
+  const shoutLfo = pogoAudioContext.createOscillator();
+  shoutLfo.type = 'sine';
+  shoutLfo.frequency.value = 0.8;
+
+  const shoutLfoGain = pogoAudioContext.createGain();
+  shoutLfoGain.gain.value = 0.08;
+
+  shoutLfo.connect(shoutLfoGain);
+  shoutLfoGain.connect(midGain.gain);
+
+  midNoise.connect(midFilter);
+  midFilter.connect(midGain);
+  midGain.connect(pogoAudioContext.destination);
+  midNoise.start();
+  shoutLfo.start();
+
+  // Modulate crowd intensity over time
+  let intensityRAF = 0;
+  const startTime = Date.now();
+  function modulateIntensity() {
+    const elapsed = (Date.now() - startTime) / 1000;
+    const intensity = 0.3 + Math.sin(elapsed * 0.5) * 0.1 + Math.random() * 0.05;
+    crowdGain.gain.setValueAtTime(intensity, pogoAudioContext!.currentTime);
+    if (pogoActive) {
+      intensityRAF = requestAnimationFrame(modulateIntensity);
+    }
+  }
+  modulateIntensity();
+
+  pogoAudioNodes = {
+    stop: () => {
+      noiseSource.stop();
+      bassOsc.stop();
+      lfo.stop();
+      midNoise.stop();
+      shoutLfo.stop();
+      cancelAnimationFrame(intensityRAF);
+    }
+  };
+}
+
+function stopPogoSound() {
+  if (pogoAudioNodes) {
+    pogoAudioNodes.stop();
+    pogoAudioNodes = null;
+  }
+  if (pogoAudioContext) {
+    pogoAudioContext.close();
+    pogoAudioContext = null;
+  }
+}
 
 export function activatePogo() {
   if (pogoActive) return;
@@ -238,6 +371,9 @@ export function activatePogo() {
   btn.disabled = true;
   btn.textContent = '¡POGO ACTIVO!';
   countdown.style.display = 'block';
+
+  // Start crowd sound
+  startPogoSound();
 
   // Grab elements to animate
   const selectors = [
@@ -341,6 +477,9 @@ function endPogo() {
   pogoActive = false;
   cancelAnimationFrame(pogoRAF);
   clearInterval(countdownInterval);
+
+  // Stop sound
+  stopPogoSound();
 
   const countdown = document.getElementById('pogo-countdown') as HTMLDivElement;
   const btn = document.querySelector('.btn-pogo-fixed') as HTMLButtonElement;
