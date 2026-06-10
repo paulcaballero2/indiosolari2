@@ -19,48 +19,42 @@ const NEWS_ITEMS = [
     title: 'Los fans despiden al Indio en Olavarría',
     date: 'Junio 2025',
     excerpt: 'Miles de ricoteros se reunieron en el lugar del recital más grande.',
-    img: 'https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=400',
-    body: 'Una multitud silenciosa colocó velas y banderas. El Indio ya es leyenda.'
+    full: 'Una multitud silenciosa colocó velas y banderas. El Indio ya es leyenda eterna.'
   },
   {
     id: 2,
     title: 'Se reedita Luzbelito en vinilo de lujo',
     date: 'Mayo 2025',
     excerpt: 'La obra maestra de 1996 vuelve en edición remasterizada.',
-    img: 'https://images.pexels.com/photos/167636/pexels-photo-167636.jpeg?auto=compress&cs=tinysrgb&w=400',
-    body: 'Tres discos de vinilo y libro de arte. Edición de coleccionista.'
+    full: 'Tres discos de vinilo y libro de arte. Edición de coleccionista definitiva.'
   },
   {
     id: 3,
     title: 'El archivo gráfico del Indio será museo',
     date: 'Abril 2025',
     excerpt: 'Tapas y afiches al Museo de Bellas Artes de La Plata.',
-    img: 'https://images.pexels.com/photos/3756766/pexels-photo-3756766.jpeg?auto=compress&cs=tinysrgb&w=400',
-    body: 'Iconografía donada como patrimonio artístico nacional.'
+    full: 'Iconografía donada como patrimonio artístico nacional.'
   },
   {
     id: 4,
     title: 'Las cartas del Indio a Skay serán publicadas',
     date: 'Marzo 2025',
     excerpt: 'Documentos de 18 años de amistad y creación.',
-    img: 'https://images.pexels.com/photos/1699161/pexels-photo-1699161.jpeg?auto=compress&cs=tinysrgb&w=400',
-    body: 'Más de 200 cartas revelan la génesis de los himnos.'
+    full: 'Más de 200 cartas revelan la génesis de los himnos más grandes.'
   },
   {
     id: 5,
     title: 'Documental del show de Mar del Plata 1998',
     date: 'Febrero 2025',
     excerpt: 'Material inédito en restauración 4K.',
-    img: 'https://images.pexels.com/photos/2399097/pexels-photo-2399097.jpeg?auto=compress&cs=tinysrgb&w=400',
-    body: 'Cámaras caseras y audio de consola se unen en un documental mítico.'
+    full: 'Cámaras caseras y audio de consola se unen en un documental mítico.'
   },
   {
     id: 6,
     title: 'Escuela de música popular llevará su nombre',
     date: 'Enero 2025',
     excerpt: 'Primera escuela pública de rock en La Plata.',
-    img: 'https://images.pexels.com/photos/144428/pexels-photo-144428.jpeg?auto=compress&cs=tinysrgb&w=400',
-    body: 'Formación gratuita para jóvenes. "Que sepan que se puede".'
+    full: 'Formación gratuita para jóvenes. "Que sepan que se puede".'
   }
 ];
 
@@ -148,7 +142,7 @@ export default function App() {
                   "El rock and roll es la única música que puede transformar la vida de quien la escucha."
                 </div>
                 <p>
-                  En 1976 formó Patricio Rey y sus Redonditos de Ricota junto a Skay Beilinson. Su hermetismo y rechazo a los medios los convirtieron en fenómeno de culto.
+                  En 1976 formó Patricio Rey y sus Redonditos de Ricota junto a Skay Beilinson. Su hermetismo y rechazo a los medios los convirtieron en fenómeno de culto.Tras seis discos y la separación en 2001, su carrera solista ratificó su estatura.
                 </p>
               </div>
             </div>
@@ -158,6 +152,7 @@ export default function App() {
                   { year: "1949", title: "Nacimiento", desc: "Paraná, Entre Ríos" },
                   { year: "1976", title: "Fundación", desc: "Redondos en La Plata" },
                   { year: "1985", title: "Debut", desc: "Gulp! marca el inicio" },
+                  { year: "1988", title: "Locos", desc: "Jijiji, himno masivo" },
                   { year: "1996", title: "Luzbelito", desc: "Obra ma absoluta" },
                   { year: "2001", title: "Separación", desc: "Fin de los Redondos" },
                   { year: "2004", title: "Solista", desc: "El Perfume del Indio" },
@@ -259,13 +254,12 @@ export default function App() {
                 key={news.id}
                 onClick={() => setActiveNews(activeNews === news.id ? null : news.id)}
               >
-                <img className="news-img-compact" src={news.img} alt={news.title} onError={(e) => {
-                  (e.target as HTMLImageElement).src = 'https://images.pexels.com/photos/1105666/pexels-photo-1105666.jpeg?auto=compress&cs=tinysrgb&w=400';
-                }} />
+                <img className="news-img-compact" src={`https://images.pexels.com/photos/${[1105666, 167636, 3756766, 1699161, 2399097, 144428][news.id - 1]}/pexels-photo-${[1105666, 167636, 3756766, 1699161, 2399097, 144428][news.id - 1]}.jpeg?auto=compress&cs=tinysrgb&w=400`} alt={news.title} />
                 <div className="news-body-compact">
                   <h3>{news.title}</h3>
                   <time>{news.date}</time>
-                  <p>{activeNews === news.id ? news.body : news.excerpt}</p>
+                  <p className="news-excerpt-text">{news.excerpt}</p>
+                  <p className="news-full-text">{news.full}</p>
                 </div>
               </div>
             ))}
@@ -301,7 +295,7 @@ export default function App() {
                 <div className="result-score-compact" id="result-score">0% ACIERTOS</div>
                 <div className="result-title-compact" id="result-title">Turista del Rock</div>
                 <div className="result-desc-compact" id="result-desc" />
-                <div style={{ marginTop: '1rem' }}>
+                <div style={{ marginTop: '0.8rem' }}>
                   <button className="btn-share-compact" onClick={openShareModal}>
                     Compartirlo en redes
                   </button>
@@ -320,7 +314,7 @@ export default function App() {
             <div className="footer-logo">Indio Solari</div>
             <p className="footer-tagline">Patricio Rey Nunca Muere · 1949 – 2025</p>
             <p className="footer-q">
-              "La vida es muy corta para leer explicaciones. Mejor escuchá un tema y dejá que la música hable."
+              "La vida es muy corta para explicar. Mejor escuchá un tema y dejá que la música hable."
             </p>
           </div>
         </section>
