@@ -234,23 +234,23 @@ export function activatePogo() {
   pogoActive = true;
 
   const countdown = document.getElementById('pogo-countdown') as HTMLDivElement;
-  const btn = document.getElementById('pogo-btn') as HTMLButtonElement;
+  const btn = document.querySelector('.btn-pogo-fixed') as HTMLButtonElement;
   btn.disabled = true;
-  btn.textContent = '¡EL POGO ESTÁ ACTIVO!';
+  btn.textContent = '¡POGO ACTIVO!';
   countdown.style.display = 'block';
 
   // Grab elements to animate
   const selectors = [
     'nav',
     '.hero-content',
-    '.bio-grid',
+    '.bio-scroll',
     '.gallery-item',
     '.album-card',
+    '.news-card',
     '.trivia-container',
-    '.pogo-inner',
-    'footer',
+    '.footer-content',
     '.section-header',
-    '.spotify-text',
+    '.panel',
   ];
 
   pogoElements = [];
@@ -341,12 +341,12 @@ function endPogo() {
   clearInterval(countdownInterval);
 
   const countdown = document.getElementById('pogo-countdown') as HTMLDivElement;
-  const btn = document.getElementById('pogo-btn') as HTMLButtonElement;
+  const btn = document.querySelector('.btn-pogo-fixed') as HTMLButtonElement;
 
   countdown.style.display = 'none';
   btn.disabled = false;
-  btn.textContent = 'ACTIVA EL POGO MÁS GRANDE DEL MUNDO';
-  document.body.style.overflow = '';
+  btn.textContent = 'ACTIVÁ EL POGO WEB MÁS GRANDE DEL MUNDO';
+  document.body.style.overflow = 'x auto';
 
   // Restore elements
   pogoElements.forEach(p => {
